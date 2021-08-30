@@ -1,59 +1,54 @@
 <html>
-  <head>
-    <title>Parcel Sandbox</title>
-    <meta charset="UTF-8" />
-    <style>
-      * {
-        box-sizing: border-box;
-      }
 
-      .cursor {
-        border-radius: 50%;
-        background: blue;
-        width: 10px;
-        height: 10px;
-        position: fixed;
-        top: 0;
-        left: 0;
-      }
+<head>
+  <title>Parcel Sandbox</title>
+  <meta charset="UTF-8" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-      .click {
-        border-radius: 50%;
-        background: blue;
-        position: fixed;
-        width: 20px;
-        height: 20px;
-      }
+    .cursor {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 12px solid black;
+      position: fixed;
+      transform: rotate(-20deg);
+    }
 
-      .clicked {
-        border: 2px solid blue;
-      }
+    .click {
+      border-bottom-color: gray;
+    }
 
-      .circle {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: crimson;
-      }
-    </style>
-  </head>
+    .clicked {
+      border: 2px solid blue;
+    }
 
-  <body>
-    <div class="container">
-      <button id="record">Record</button>
-      <button id="play">Play</button>
-      <input type="text" />
-      <br />
-      <a
-        href="http://asdf.com"
-        onclick="(function(e) {e.preventDefault();e.stopImmediatePropagation();})(event)"
-        ><code>e.preventDefault(); e.stopImmediatePropagation()</code></a
-      >
-      <br />
-      <div class="circle"></div>
-      <div class="circle"></div>
-    </div>
-    <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
-    <script src="src/index.js"></script>
-  </body>
+    .circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: crimson;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <button id="record">Record</button>
+    <button id="play">Play</button>
+    <input type="text" />
+    <br />
+    <a href="http://asdf.com"
+      onclick="(function(e) {e.preventDefault();e.stopImmediatePropagation();})(event)"><code>e.preventDefault(); e.stopImmediatePropagation()</code></a>
+    <br />
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+  <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+  <script src="src/index.js"></script>
+</body>
+
 </html>
