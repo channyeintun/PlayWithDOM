@@ -52,10 +52,10 @@ $(function() {
       }
     },
     {
-      eventName: "keypress",
+      eventName: "keyup",
       handler: function handleKeyPress(e) {
         recording.events.push({
-          type: "keypress",
+          type: "keyup",
           target: e.target,
           value: e.target.value,
           keyCode: e.keyCode,
@@ -149,10 +149,10 @@ $(function() {
       flashClass($element, "clicked");
     }
 
-    if (event.type === "keypress") {
+    if (event.type === "keyup") {
       const path = $(event.target).getPath();
       const $element = $iframeDoc.find(path);
-      $element.trigger({ type: "keypress", keyCode: event.keyCode });
+      $element.trigger({ type: "keyup", keyCode: event.keyCode });
       $element.val(event.value);
     }
   }
