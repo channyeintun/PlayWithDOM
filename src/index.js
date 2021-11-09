@@ -14,7 +14,8 @@ console.log("load");
 console.log("loaded");
 $(function () {
       // config
-      const REPLAY_SCALE = 0.631;
+      // const REPLAY_SCALE = 0.631;
+      const REPLAY_SCALE=0.9;
       const SPEED = 1;
 
       // init elements
