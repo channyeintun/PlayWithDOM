@@ -1,57 +1,58 @@
 <html>
 
 <head>
-  <title>Parcel Sandbox</title>
-  <meta charset="UTF-8" />
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+      <title>Parcel Sandbox</title>
+      <meta charset="UTF-8" />
+      <style>
+            * {
+                  box-sizing: border-box;
+            }
 
-    .cursor {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 12px solid black;
-      position: fixed;
-      transform: rotate(-20deg);
-    }
+            .cursor {
+                  width: 0;
+                  height: 0;
+                  border-left: 6px solid transparent;
+                  border-right: 6px solid transparent;
+                  border-bottom: 12px solid black;
+                  position: fixed;
+                  transform: rotate(-20deg);
+            }
 
-    .click {
-      border-bottom-color: gray;
-    }
+            .click {
+                  border-bottom-color: gray;
+            }
 
-    .clicked {
-      border: 2px solid blue;
-    }
+            .clicked {
+                  border: 2px solid blue;
+            }
 
-    .circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: crimson;
-    }
-    .text-area{
-       width: 400px;
-       height: 200px;
-    }
-  </style>
+            .circle {
+                  width: 120px;
+                  height: 120px;
+                  border-radius: 50%;
+                  background: crimson;
+            }
+
+            .text-area {
+                  width: 400px;
+                  height: 200px;
+            }
+      </style>
 </head>
 
 <body>
-  <div class="container">
-    <button id="record">Record</button>
-    <button id="play">Play</button>
-    <input type="text" />
-    <br />
-    <a href="http://asdf.com"
-      onclick="(function(e) {e.preventDefault();e.stopImmediatePropagation();})(event)"><code>e.preventDefault(); e.stopImmediatePropagation()</code></a>
-    <br />
-    <textarea class="text-area"></textarea>
-  </div>
-  <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
-  <script src="src/index.js"></script>
+      <div class="container">
+            <button id="record">Record</button>
+            <button id="play">Play</button>
+            <input type="text" />
+            <br />
+            <a href="http://asdf.com"
+                  onclick="(function(e) {e.preventDefault();e.stopImmediatePropagation();})(event)"><code>e.preventDefault(); e.stopImmediatePropagation()</code></a>
+            <br />
+            <textarea class="text-area"></textarea>
+      </div>
+      <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+      <script src="src/index.js"></script>
 </body>
 
 </html>
