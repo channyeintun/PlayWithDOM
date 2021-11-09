@@ -106,7 +106,6 @@ $(function () {
       // Replay
       $play.click(function () {
             // init iframe set scale
-            console.log(recording.events)
             const $iframe = $("<iframe>");
             $iframe.height(recording.height * REPLAY_SCALE);
             $iframe.width(recording.width * REPLAY_SCALE);
@@ -209,7 +208,7 @@ $(function () {
       }
 
       function flashClass($el, className) {
-            $el
+                  $el
                   .addClass(className)
                   .delay(200)
                   .queue(() => $el.removeClass(className).dequeue());

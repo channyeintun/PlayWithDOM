@@ -23,19 +23,21 @@
             }
 
             .clicked {
-                  border: 2px solid blue;
-            }
-
-            .circle {
-                  width: 120px;
-                  height: 120px;
-                  border-radius: 50%;
-                  background: crimson;
+                  border: 5px solid yellowgreen !important;
             }
 
             .text-area {
                   width: 400px;
                   height: 200px;
+            }
+
+            .block1{
+                  margin-top:20px;
+                  width: 100px;
+                  height:100px;
+                  border-radius: 10px;
+                  background-color: aquamarine;
+                  border:2px solid darkslategrey;
             }
       </style>
 </head>
@@ -50,6 +52,7 @@
                   onclick="(function(e) {e.preventDefault();e.stopImmediatePropagation();})(event)"><code>e.preventDefault(); e.stopImmediatePropagation()</code></a>
             <br />
             <textarea class="text-area"></textarea>
+            <div class="block1"></div>
       </div>
       <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
       <script src="src/index.js"></script>
