@@ -6,7 +6,6 @@ import $ from "./jquery";
 - Play creates an `<iframe>`, injects the original HTML and replays the user events. 
 - To change zoom change the `REPLAY_SCALE` variable in the source code. 
 - To change the playback speed change the `SPEED` variable in the source code.
-- NB I only tested the jsbin on chrome 56.
 */
 
 console.log("load");
