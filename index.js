@@ -62,6 +62,19 @@ $(function () {
                   }
             },
             {
+                  eventName: "keydown",
+                  handler: function handleKeyPress(e) {
+                        recording.events.push({
+                              type: "keydown",
+                              target: e.target,
+                              value: e.target.value,
+                              keyCode: e.keyCode,
+                              time: Date.now(),
+                              caretPosition: e.target.selectionStart
+                        });
+                  }
+            },
+            {
                   eventName: "selectionchange",
                   handler: function handleSelectionChange(e) {
                         let target = document.activeElement;
@@ -168,8 +181,14 @@ $(function () {
             if (event.type === "keyup") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
-                  // $element.trigger({ type: "keyup", keyCode: event.keyCode });
                   $element.val(event.value);
+                  const { caretPosition } = event;
+                  $element[0].setSelectionRange(caretPosition, caretPosition);
+            }
+            if (event.type === "keydown") {
+                  const path = $(event.target).getPath();
+                  const $element = $iframeDoc.find(path);
+                  // $element.trigger({ type: "keyup", keyCode: event.keyCode });
                   const { caretPosition } = event;
                   $element[0].setSelectionRange(caretPosition, caretPosition);
             }
