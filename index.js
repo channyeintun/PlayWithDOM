@@ -11,7 +11,7 @@ import $ from "./jquery";
 $(function () {
       // config
       // const REPLAY_SCALE = 0.631;
-      const REPLAY_SCALE=0.9;
+      const REPLAY_SCALE = 0.9;
       const SPEED = 1;
 
       // init elements
@@ -56,7 +56,8 @@ $(function () {
                               target: e.target,
                               value: e.target.value,
                               keyCode: e.keyCode,
-                              time: Date.now()
+                              time: Date.now(),
+                              caretPosition: e.target.selectionStart
                         });
                   }
             },
@@ -161,13 +162,16 @@ $(function () {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   flashClass($element, "clicked");
+                  $element.focus();
             }
 
             if (event.type === "keyup") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
-                  $element.trigger({ type: "keyup", keyCode: event.keyCode });
+                  // $element.trigger({ type: "keyup", keyCode: event.keyCode });
                   $element.val(event.value);
+                  const { caretPosition } = event;
+                  $element[0].setSelectionRange(caretPosition, caretPosition);
             }
 
             if (event.type === "selectionchange") {
@@ -205,7 +209,7 @@ $(function () {
       }
 
       function flashClass($el, className) {
-                  $el
+            $el
                   .addClass(className)
                   .delay(200)
                   .queue(() => $el.removeClass(className).dequeue());
