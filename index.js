@@ -8,6 +8,8 @@ import $ from "./jquery";
 - To change the playback speed change the `SPEED` variable in the source code.
 */
 
+//virtual caret is the answer , Scrimba just took the selection end for the position.
+
 $(function () {
       // config
       // const REPLAY_SCALE = 0.631;
@@ -182,22 +184,18 @@ $(function () {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   $element.val(event.value);
-                  const { caretPosition } = event;
-                  $element[0].setSelectionRange(caretPosition, caretPosition);
             }
             if (event.type === "keydown") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   // $element.trigger({ type: "keyup", keyCode: event.keyCode });
-                  const { caretPosition } = event;
-                  $element[0].setSelectionRange(caretPosition, caretPosition);
             }
 
             if (event.type === "selectionchange") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   $element.focus();
-                  $element[0].setSelectionRange(event.start, event.end);
+                  $element[0].setSelectionRange(event.start,event.end);
             }
       }
 
