@@ -8,9 +8,6 @@ import $ from "./jquery";
 - To change the playback speed change the `SPEED` variable in the source code.
 */
 
-console.log("load");
-
-console.log("loaded");
 $(function () {
       // config
       // const REPLAY_SCALE = 0.631;
@@ -118,7 +115,7 @@ $(function () {
                   "-webkit-transform": `scale(${REPLAY_SCALE})`,
                   "-webkit-transform-origin": `0 0`
             });
-            $body.append($iframe);
+            !$body.find("iframe").length && $body.append($iframe);
 
             // Load HTML
             $iframe[0].contentDocument.documentElement.innerHTML = recording.htmlCopy;
