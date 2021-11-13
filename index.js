@@ -237,7 +237,7 @@ $(function () {
                   const $element = $iframeDoc.find(path);
                   $element.focus();
                   $element[0].setSelectionRange(event.start, event.end);
-                  $fakeInput = $iframeDoc.find(".textarea-wrapper");
+                  const $fakeInput = $iframeDoc.find(".textarea-wrapper");
                   $fakeCaret = $("<div class='caret'></div>");
                   const isCaretExist = !$iframeDoc.find(".caret").length;
                   const style = {
