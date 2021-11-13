@@ -13,6 +13,7 @@ import $ from "./jquery";
 $(function () {
       // config
       // const REPLAY_SCALE = 0.631;
+      console.warn('Caret position and scroll bug in bottom')
       const REPLAY_SCALE = 0.9;
       const SPEED = 1;
 
@@ -97,12 +98,16 @@ $(function () {
                                     value: target.value,
                                     time: Date.now(),
                                     caret,
-                                    width: removeUnit(computed["width"])
-                                          - removeUnit(computed["borderLeftWidth"])
-                                          - removeUnit(computed["borderRightWidth"]),
-                                    height: removeUnit(computed["height"])
-                                          - removeUnit(computed["borderTopWidth"])
-                                          - removeUnit(computed["borderBottomWidth"]),
+                                    width: parseInt(computed["width"])
+                                          - parseInt(computed["borderLeftWidth"])
+                                          - parseInt(computed["borderRightWidth"]),
+                                    height: parseInt(computed["height"])
+                                          - parseInt(computed["borderTopWidth"])
+                                          - parseInt(computed["borderBottomWidth"]),
+                                    borderBottomWidth: parseInt(computed["borderBottomWidth"]),
+                                    borderTopWidth: parseInt(computed["borderTopWidth"]),
+                                    borderLeftWidth: parseInt(computed["borderLeftWidth"]),
+                                    borderRightWidth: parseInt(computed["borderRightWidth"]),
                               })
                         }
                   }
@@ -237,14 +242,23 @@ $(function () {
                   const $element = $iframeDoc.find(path);
                   $element.focus();
                   $element[0].setSelectionRange(event.start, event.end);
-                  const $fakeInput = $iframeDoc.find(".textarea-wrapper");
+                  const $fakeInput = $iframeDoc.find(".fake-input");
                   const $fakeCaret = $("<div class='caret'></div>");
                   const isCaretExist = !$iframeDoc.find(".caret").length;
                   const $caret = $iframeDoc.find(".caret")[0];
                   const caretHeight = ($caret && window.getComputedStyle($caret).height) || 0;
+                  // event.caret.top >= event.height
+                  // ? (event.height - parseInt(caretHeight))
+                  //  : 
+
+                  if (parseInt(event.caret.top) >= (event.height
+                        + event.borderBottomWidth + event.borderTopWidth)) {
+                        $fakeInput.css("overflowY", "scroll");
+                  }
+
+                  console.log('caret.top',event.caret.top)
                   const style = {
-                        top: event.caret.top >= event.height
-                              ? event.height - removeUnit(caretHeight) : event.caret.top,
+                        top: event.caret.top,
                         left: event.caret.left
                   }
                   if (isCaretExist) {
@@ -258,6 +272,7 @@ $(function () {
             if (event.type == "scroll") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
+                  const $fakeInput = $iframeDoc.find(".fake-input");
                   const scrollOpts = {
                         scrollTop: event.scrollTop,
                         scrollLeft: event.scrollLeft,
@@ -272,8 +287,11 @@ $(function () {
                         width: event.width,
                         height: event.height
                   }
-                  const value=getScrollDuration(event.time,lastEvent);
+                  const value = getScrollDuration(event.time, lastEvent);
                   $element.animate({
+                        scrollTop: scrollOpts.scrollTop
+                  }, value, () => { });
+                  $fakeInput.animate({
                         scrollTop: scrollOpts.scrollTop
                   }, value, () => { });
 
@@ -324,12 +342,8 @@ $(function () {
             let last = 1;
             return function (currentTime, lastEvent) {
                   const res = lastEvent?.type === "scroll" ? currentTime - last : 1;
-                  return (last = currentTime, res/1000);
+                  return (last = currentTime, res / 1000);
             }
-      }
-
-      function removeUnit(str) {
-            return `${str}`.match(/\d+/);
       }
 });
 
