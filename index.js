@@ -85,8 +85,8 @@ $(function () {
                         let postion = target.selectionDirection === "forward"
                               ? target.selectionEnd
                               : target.selectionStart;
-                        let caret = window.getCaretCoordinates(target, postion,{debug:false});
-                        let computed=window.getComputedStyle(target)
+                        let caret = window.getCaretCoordinates(target, postion, { debug: false });
+                        let computed = window.getComputedStyle(target)
                         if (target && target.matches('input,textarea')) {
                               recording.events.push({
                                     type: "selectionchange",
@@ -97,12 +97,12 @@ $(function () {
                                     value: target.value,
                                     time: Date.now(),
                                     caret,
-                                    width:removeUnit(computed["width"])
-                                    -removeUnit(computed["borderLeftWidth"])
-                                    -removeUnit(computed["borderRightWidth"]),
+                                    width: removeUnit(computed["width"])
+                                          - removeUnit(computed["borderLeftWidth"])
+                                          - removeUnit(computed["borderRightWidth"]),
                                     height: removeUnit(computed["height"])
-                                    -removeUnit(computed["borderTopWidth"])
-                                    -removeUnit(computed["borderBottomWidth"]),
+                                          - removeUnit(computed["borderTopWidth"])
+                                          - removeUnit(computed["borderBottomWidth"]),
                               })
                         }
                   }
@@ -240,10 +240,14 @@ $(function () {
                   const $fakeInput = $iframeDoc.find(".textarea-wrapper");
                   const $fakeCaret = $("<div class='caret'></div>");
                   const isCaretExist = !$iframeDoc.find(".caret").length;
+                  const $caret = $iframeDoc.find(".caret")[0];
+                  const caretHeight = ($caret && window.getComputedStyle($caret).height) || 0;
                   const style = {
-                        top: event.caret.top,
+                        top: event.caret.top >= event.height
+                              ? event.height - caretHeight : event.caret.top,
                         left: event.caret.left
                   }
+                  console.log(style);
                   if (isCaretExist) {
                         $fakeCaret.css(style);
                         $fakeInput.append($fakeCaret);
@@ -255,7 +259,6 @@ $(function () {
             if (event.type == "scroll") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
-                  // const computed = window.getComputedStyle($element[0]);
                   const scrollOpts = {
                         scrollTop: event.scrollTop,
                         scrollLeft: event.scrollLeft,
@@ -270,17 +273,10 @@ $(function () {
                         width: event.width,
                         height: event.height
                   }
-                  const value = getScrollDuration(event.time, lastEvent);
+                  console.log(scrollOpts)
                   $element.animate({
                         scrollTop: scrollOpts.scrollTop
-                  }, value, () => { })
-                  // const option = {
-                  //       top: event.scrollTop,
-                  //       left: event.scrollLeft + (computed['fontSize'].match(/\d+/) * 1.25),
-                  //       behavior: 'smooth',
-                  // }
-                  // console.log(option)
-                  // $element[0].scrollTo(option);
+                  }, 1, () => { });
 
             }
       }
@@ -333,7 +329,7 @@ $(function () {
             }
       }
 
-      function removeUnit(str){
+      function removeUnit(str) {
             return str.match(/\d+/);
       }
 });
