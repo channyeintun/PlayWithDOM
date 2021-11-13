@@ -85,7 +85,7 @@ $(function () {
                         let postion = target.selectionDirection === "forward"
                               ? target.selectionEnd
                               : target.selectionStart;
-                        let caret = window.getCaretCoordinates(target, postion);
+                        let caret = window.getCaretCoordinates(target, postion,{debug:true});
                         let computed=window.getComputedStyle(target)
                         if (target && target.matches('input,textarea')) {
                               recording.events.push({
@@ -232,7 +232,7 @@ $(function () {
                   // $element.trigger({ type: "keyup", keyCode: event.keyCode });
             }
 
-            if (event.type === "selectionchange" || event.type == "scroll") {
+            if (event.type === "selectionchange") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   $element.focus();
@@ -241,12 +241,9 @@ $(function () {
                   $fakeCaret = $("<div class='caret'></div>");
                   const isCaretExist = !$iframeDoc.find(".caret").length;
                   const style = {
-                        top: event.caret?.top,
-                        left: event.caret?.left
+                        top: event.caret.top,
+                        left: event.caret.left
                   }
-                  console.log('wh',event.width,event.height)
-                  console.log('swsh',event.scrollWidth,event.scrollHeight)
-                  console.log('s',style);
                   if (isCaretExist) {
                         $fakeCaret.css(style);
                         $fakeInput.append($fakeCaret);
