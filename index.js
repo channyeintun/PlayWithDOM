@@ -185,7 +185,7 @@ $(function () {
 
             (function draw() {
                   let event = recording.events[i];
-                  lastEvent = event;
+                  let lastEvent = event;
                   if (!event) {
                         return;
                   }
