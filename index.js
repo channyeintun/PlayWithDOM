@@ -8,7 +8,7 @@ import $ from "./jquery";
 - To change the playback speed change the `SPEED` variable in the source code.
 */
 
-//scroll lesson in web.dev/learn/css
+//fakeInputShoudbe scrollable when condition satifies.
 
 $(function () {
       // config
@@ -247,7 +247,6 @@ $(function () {
                               ? event.height - removeUnit(caretHeight) : event.caret.top,
                         left: event.caret.left
                   }
-                  console.log(style);
                   if (isCaretExist) {
                         $fakeCaret.css(style);
                         $fakeInput.append($fakeCaret);
@@ -273,11 +272,10 @@ $(function () {
                         width: event.width,
                         height: event.height
                   }
-                  // const value=getScrollDuration(event.time);
-                  console.log(event.time);
+                  const value=getScrollDuration(event.time,lastEvent);
                   $element.animate({
                         scrollTop: scrollOpts.scrollTop
-                  }, 1, () => { });
+                  }, value, () => { });
 
             }
       }
@@ -325,13 +323,13 @@ $(function () {
       function durationWithLastTime() {
             let last = 1;
             return function (currentTime, lastEvent) {
-                  const res = lastEvent.type === "scroll" ? currentTime - last : 1;
-                  return (last = currentTime, parseInt(res/1000));
+                  const res = lastEvent?.type === "scroll" ? currentTime - last : 1;
+                  return (last = currentTime, res/1000);
             }
       }
 
       function removeUnit(str) {
-            return str.match(/\d+/);
+            return `${str}`.match(/\d+/);
       }
 });
 
