@@ -3,46 +3,8 @@
 <head>
       <title>Mini Scrimba</title>
       <meta charset="UTF-8" />
-      <style>
-            * {
-                  box-sizing: border-box;
-            }
-
-            .cursor {
-                  width: 20px;
-                  height: 20px;
-                  position: fixed;
-                  background-image: url(cursor.svg);
-                  background-size: contain;
-                  background-repeat: no-repeat;
-            }
-
-            .click {
-                  border-bottom-color: gray;
-            }
-
-            .clicked {
-                  border: 5px solid yellowgreen !important;
-            }
-
-            .text-area {
-                  width: 400px;
-                  height: 200px;
-            }
-
-            .block1{
-                  margin-top:20px;
-                  width: 100px;
-                  height:100px;
-                  border-radius: 10px;
-                  background-color: aquamarine;
-                  border:2px solid darkslategrey;
-            }
-
-            .block1:active{
-                  border:5px solid yellowgreen;
-            }
-      </style>
+      <link href="./index.css" rel="stylesheet">
+      <script src="./jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -51,12 +13,13 @@
             <button id="play">Play</button>
             <br />
             <br />
-            <textarea class="text-area"></textarea>
+            <div class="textarea-wrapper">
+                  <textarea class="text-area"></textarea>
+            </div>
             <div class="block1"></div>
       </div>
-      <script type="module" src="https://code.jquery.com/jquery-1.8.3.js"></script>
+      <script type="module" src="./lib.js"></script>
       <script type="module" src="index.js"></script>
-      
 </body>
 
 </html>

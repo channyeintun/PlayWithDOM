@@ -8,7 +8,7 @@ import $ from "./jquery";
 - To change the playback speed change the `SPEED` variable in the source code.
 */
 
-//virtual caret is the answer , Scrimba just took the selection end for the position.
+//scroll lesson in web.dev/learn/css
 
 $(function () {
       // config
@@ -24,6 +24,8 @@ $(function () {
 
       // Data type for storing a recording
       const recording = { events: [], startTime: -1, htmlCopy: "" };
+
+      const getScrollDuration = durationWithLastTime();
 
       // Record each type of event
       const handlers = [
@@ -80,6 +82,11 @@ $(function () {
                   eventName: "selectionchange",
                   handler: function handleSelectionChange(e) {
                         let target = document.activeElement;
+                        let postion = target.selectionDirection === "forward"
+                              ? target.selectionEnd
+                              : target.selectionStart;
+                        let caret = window.getCaretCoordinates(target, postion);
+                        let computed=window.getComputedStyle(target)
                         if (target && target.matches('input,textarea')) {
                               recording.events.push({
                                     type: "selectionchange",
@@ -88,33 +95,64 @@ $(function () {
                                     end: target.selectionEnd,
                                     direction: target.selectionDirection,
                                     value: target.value,
-                                    time: Date.now()
+                                    time: Date.now(),
+                                    caret,
+                                    width:removeUnit(computed["width"])
+                                    -removeUnit(computed["borderLeftWidth"])
+                                    -removeUnit(computed["borderRightWidth"]),
+                                    height: removeUnit(computed["height"])
+                                    -removeUnit(computed["borderTopWidth"])
+                                    -removeUnit(computed["borderBottomWidth"]),
                               })
                         }
+                  }
+            },
+            {
+                  eventName: "scroll",
+                  handler: function handleKeyPress(e) {
+                        recording.events.push({
+                              type: "scroll",
+                              target: e.target,
+                              value: e.target.value,
+                              time: Date.now(),
+                              scrollTop: e.target.scrollTop,
+                              scrollLeft: e.target.scrollLeft,
+                              scrollWidth: e.target.scrollWidth,
+                              scrollHeight: e.target.scrollHeight,
+                              clientWidth: e.target.clientWidth,
+                              clientHeight: e.target.clientHeight,
+                              offsetWidth: e.target.offsetWidth,
+                              offsetHeight: e.target.offsetHeight,
+                              clientX: e.target.clientX,
+                              clientY: e.target.clientY,
+                              offsetTop: e.target.offsetTop,
+                              offsetLeft: e.target.offsetLeft,
+                              width: window.getComputedStyle(e.target)["width"],
+                              height: window.getComputedStyle(e.target)["height"]
+                        });
                   }
             }
       ];
 
       // Attach recording button
-      $record.toggle(
-            function startRecording() {
-                  // start recording
-                  $record.text("Recording (Click again to Stop)");
-                  $play.attr("disabled", 1);
-                  recording.startTime = Date.now();
-                  recording.events = [];
-                  recording.htmlCopy = $(document.documentElement).html();
-                  recording.height = $(window).height();
-                  recording.width = $(window).width();
-                  handlers.map(x => listen(x.eventName, x.handler));
-            },
-            function stopRecording() {
-                  // stop recording
-                  $record.text("Record");
-                  $play.removeAttr("disabled");
-                  handlers.map(x => removeListener(x.eventName, x.handler));
-            }
-      );
+      $record.click(toggler(startRecording, stopRecording));
+      function startRecording() {
+            // start recording
+            $record.text("Recording (Click again to Stop)");
+            $play.attr("disabled", 1);
+            recording.startTime = Date.now();
+            recording.events = [];
+            recording.htmlCopy = $(document.documentElement).html();
+            recording.height = $(window).height();
+            recording.width = $(window).width();
+            handlers.map(x => listen(x.eventName, x.handler));
+      }
+      function stopRecording() {
+            // stop recording
+            $record.text("Record");
+            $play.removeAttr("disabled");
+            handlers.map(x => removeListener(x.eventName, x.handler));
+      }
 
       // Replay
       $play.click(function () {
@@ -140,19 +178,22 @@ $(function () {
             // Insert fake cursor
             const $fakeCursor = $('<div class="cursor"></div>');
             $iframeDoc.find("body").append($fakeCursor);
+            $iframeDoc.find("textarea").css("caret-color", "transparent");
 
             let i = 0;
             const startPlay = Date.now();
 
             (function draw() {
                   let event = recording.events[i];
+                  lastEvent = event;
                   if (!event) {
                         return;
                   }
                   let offsetRecording = event.time - recording.startTime;
                   let offsetPlay = (Date.now() - startPlay) * SPEED;
                   if (offsetPlay >= offsetRecording) {
-                        drawEvent(event, $fakeCursor, $iframeDoc);
+                        i && (lastEvent = recording.events[i - 1])
+                        drawEvent(event, $fakeCursor, $iframeDoc, lastEvent);
                         i++;
                   }
 
@@ -164,7 +205,7 @@ $(function () {
             })();
       });
 
-      function drawEvent(event, $fakeCursor, $iframeDoc) {
+      function drawEvent(event, $fakeCursor, $iframeDoc, lastEvent) {
             if (event.type === "click" || event.type === "mousemove") {
                   $fakeCursor.css({
                         top: event.y,
@@ -191,11 +232,59 @@ $(function () {
                   // $element.trigger({ type: "keyup", keyCode: event.keyCode });
             }
 
-            if (event.type === "selectionchange") {
+            if (event.type === "selectionchange" || event.type == "scroll") {
                   const path = $(event.target).getPath();
                   const $element = $iframeDoc.find(path);
                   $element.focus();
-                  $element[0].setSelectionRange(event.start,event.end);
+                  $element[0].setSelectionRange(event.start, event.end);
+                  $fakeInput = $iframeDoc.find(".textarea-wrapper");
+                  $fakeCaret = $("<div class='caret'></div>");
+                  const isCaretExist = !$iframeDoc.find(".caret").length;
+                  const style = {
+                        top: event.caret?.top,
+                        left: event.caret?.left
+                  }
+                  console.log('wh',event.width,event.height)
+                  console.log('swsh',event.scrollWidth,event.scrollHeight)
+                  console.log('s',style);
+                  if (isCaretExist) {
+                        $fakeCaret.css(style);
+                        $fakeInput.append($fakeCaret);
+                  } else {
+                        $fakeInput.find(".caret").css(style);
+                  }
+            }
+
+            if (event.type == "scroll") {
+                  const path = $(event.target).getPath();
+                  const $element = $iframeDoc.find(path);
+                  // const computed = window.getComputedStyle($element[0]);
+                  const scrollOpts = {
+                        scrollTop: event.scrollTop,
+                        scrollLeft: event.scrollLeft,
+                        scrollWidth: event.scrollWidth,
+                        scrollHeight: event.scrollHeight,
+                        clientWidth: event.clientWidth,
+                        clientHeight: event.clientHeight,
+                        offsetWidth: event.offsetWidth,
+                        offsetHeight: event.offsetHeight,
+                        offsetTop: event.offsetTop,
+                        offsetLeft: event.offsetLeft,
+                        width: event.width,
+                        height: event.height
+                  }
+                  const value = getScrollDuration(event.time, lastEvent);
+                  $element.animate({
+                        scrollTop: scrollOpts.scrollTop
+                  }, value, () => { })
+                  // const option = {
+                  //       top: event.scrollTop,
+                  //       left: event.scrollLeft + (computed['fontSize'].match(/\d+/) * 1.25),
+                  //       behavior: 'smooth',
+                  // }
+                  // console.log(option)
+                  // $element[0].scrollTo(option);
+
             }
       }
 
@@ -231,4 +320,25 @@ $(function () {
                   .delay(200)
                   .queue(() => $el.removeClass(className).dequeue());
       }
+
+      function toggler(fn1, fn2) {
+            let on = false;
+            return function () {
+                  return (on ? fn2() : fn1(), on = !on)
+            }
+      }
+
+      function durationWithLastTime() {
+            let last = 0;
+            return function (currentTime, lastEvent) {
+                  const res = lastEvent.type === "scroll" ? currentTime - last : 0;
+                  return (last = currentTime, res);
+            }
+      }
+
+      function removeUnit(str){
+            return str.match(/\d+/);
+      }
 });
+
+
