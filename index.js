@@ -85,7 +85,7 @@ $(function () {
                         let postion = target.selectionDirection === "forward"
                               ? target.selectionEnd
                               : target.selectionStart;
-                        let caret = window.getCaretCoordinates(target, postion,{debug:true});
+                        let caret = window.getCaretCoordinates(target, postion,{debug:false});
                         let computed=window.getComputedStyle(target)
                         if (target && target.matches('input,textarea')) {
                               recording.events.push({
