@@ -244,7 +244,7 @@ $(function () {
                   const caretHeight = ($caret && window.getComputedStyle($caret).height) || 0;
                   const style = {
                         top: event.caret.top >= event.height
-                              ? event.height - caretHeight : event.caret.top,
+                              ? event.height - removeUnit(caretHeight) : event.caret.top,
                         left: event.caret.left
                   }
                   console.log(style);
@@ -273,7 +273,8 @@ $(function () {
                         width: event.width,
                         height: event.height
                   }
-                  console.log(scrollOpts)
+                  // const value=getScrollDuration(event.time);
+                  console.log(event.time);
                   $element.animate({
                         scrollTop: scrollOpts.scrollTop
                   }, 1, () => { });
@@ -322,10 +323,10 @@ $(function () {
       }
 
       function durationWithLastTime() {
-            let last = 0;
+            let last = 1;
             return function (currentTime, lastEvent) {
-                  const res = lastEvent.type === "scroll" ? currentTime - last : 0;
-                  return (last = currentTime, res);
+                  const res = lastEvent.type === "scroll" ? currentTime - last : 1;
+                  return (last = currentTime, parseInt(res/1000));
             }
       }
 
